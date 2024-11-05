@@ -1,0 +1,35 @@
+pipeline {
+agent any
+stages {
+stage('Checkout') {
+steps {
+git branch: 'main', url:
+'https://github.com/Sairamesh1/javawar.git'
+}
+post {
+success {
+emailext(
+subject: "Jenkins Job '${env.JOB_NAME}' - Build '${env.BUILD_NUMBER}' -Success",
+body: """
+Status: ${env.JOB_NAME} is Successful!!!
+Job URL: // ${env.JOB_DISPLAY_URL} //
+Build Number: [${env.BUILD_NUMBER}]
+""",
+to: 'korangisairamesh0@gmail.com'
+)
+}
+failure {
+emailext(
+subject: "Jenkins Job '${env.JOB_NAME}' - Build '${env.BUILD_NUMBER}' -Failure",
+body: """
+Status: ${env.JOB_NAME} has Failed!!!
+Job URL: ${env.JOB_DISPLAY_URL}
+Build Number: [${env.BUILD_NUMBER}]
+""",
+to: 'korangisairamesh0@gmail.com'
+)
+}
+}
+}
+}
+}
