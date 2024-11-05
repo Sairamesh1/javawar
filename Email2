@@ -16,7 +16,7 @@ pipeline {
       Build Number: $BUILD_NUMBER
       Job URL: $BUILD_URL
       Build Status: SUCCESS
-      ''', 
+      '''
     subject: '$JOB_NAME - Build # $BUILD_NUMBER - Success', to: 'korangisairamesh0@gmail.com'
 }
 }
