@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven'
+    }
+    environment {
+        TOMCAT_USER = 'ec2-user'
+        TOMCAT_HOST = '3.108.64.245'
+        TOMCAT_PATH = '/opt/apache-tomcat-9.0.91/webapps/' 
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', credentialsId: 'github', url: 'https://github.com/Sairamesh1/javawar.git'
+            }
+        }
+ 
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+            post {
+                success {
+                    echo "Archiving the  Artifacts"
+                    archiveArtifacts artifacts: '**/target/*.war'
+                }
+            }
+        }
+ stage('Deploy') {
+            steps {
+                sshagent(['tomcatnew']) {
+                    sh "rsync -avz -e 'ssh -o StrictHostKeyChecking=no' --delete target/*.war ${TOMCAT_USER}@${TOMCAT_HOST}:${TOMCAT_PATH}"
+                }
+            }
+        }
+    }
+}
