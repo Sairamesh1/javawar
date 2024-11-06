@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url:
+             'https://github.com/Sairamesh1/javawar.git             
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext (
+                subject: "$JOB_NAME - Build # $BUILD_NUMBER - Success",
+                body: """
+                    Job Name: $JOB_NAME
+                    Build Number: $BUILD_NUMBER
+                    Job URL: $BUILD_URL
+                    Build Status: SUCCESS
+                """,
+                to: 'korangisairamesh0@gmail.com'
+            )
+        }
+        failure {
+            emailext (
+                subject: "$JOB_NAME - Build # $BUILD_NUMBER - Failure",
+                body: """
+                    Job Name: $JOB_NAME
+                    Build Number: $BUILD_NUMBER
+                    Job URL: $BUILD_URL
+                    Build Status: FAILURE
+                """,
+                to: 'korangisairamesh0@gmail.com'
+            )
+        }
+        unstable {
+            emailext (
+                subject: "$JOB_NAME - Build # $BUILD_NUMBER - Unstable",
+                body: """
+                    Job Name: $JOB_NAME
+                    Build Number: $BUILD_NUMBER
+                    Job URL: $BUILD_URL
+                    Build Status: UNSTABLE
+                """,
+                to: 'korangisairamesh0@gmail.com'
+            )
+        }
+    }
+}
