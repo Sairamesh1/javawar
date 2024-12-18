@@ -5,5 +5,5 @@ RUN apt install git -y
     maven \
     && apt-get clean
 RUN git clone https://github.com/springhow/spring-boot-war-example.git
-WORKDIR /myapp
+RUN mvn clean package
 
