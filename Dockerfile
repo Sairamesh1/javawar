@@ -5,12 +5,5 @@ RUN apt install git -y
     maven \
     && apt-get clean
 RUN git clone https://github.com/springhow/spring-boot-war-example.git
-WORKDIR /spring-boot-war-example
+WORKDIR /myapp
 
-FROM maven:3.8.6-amazoncorretto-11 AS build
-WORKDIR /app
-COPY --from=clone /spring-boot-war-example .
-RUN mvn clean install
-
-FROM artisantek/tomcat:1 AS deploy
-COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/
